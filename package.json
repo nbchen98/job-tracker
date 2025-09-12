@@ -1,0 +1,35 @@
+{
+  "name": "job-tracker",
+  "version": "1.0.0",
+  "description": "A full-stack job application tracking system with React frontend, Node.js backend, and Chrome extension",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "job-tracker",
+    "react",
+    "nodejs",
+    "postgresql",
+    "chrome-extension",
+    "fullstack",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/job-tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/job-tracker/issues"
+  },
+  "homepage": "https://github.com/yourusername/job-tracker#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

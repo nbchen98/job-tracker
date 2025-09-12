@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Job Tracker Extension",
+  "version": "1.0",
+  "description": "Quickly add job applications to your Job Tracker from any job posting page",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:5432/*",
+    "https://your-domain.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Add to Job Tracker"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
