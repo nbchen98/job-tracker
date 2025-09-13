@@ -28,8 +28,13 @@ app.use(cors({
     'https://job-tracker-nghc.onrender.com', // Your Render backend URL
     'https://job-tracker-henna.vercel.app' // Your actual Vercel frontend URL
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 app.use(express.json());
 
 // Database connection is now handled in models/database.js
