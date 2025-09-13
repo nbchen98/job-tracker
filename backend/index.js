@@ -25,8 +25,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173', 
     'http://localhost:5432',
-    'https://your-frontend-domain.vercel.app', // Will update with actual Vercel URL
-    'https://your-frontend-domain.netlify.app'  // Alternative if using Netlify
+    'https://job-tracker-nghc.onrender.com', // Your Render backend URL
+    'https://your-frontend-domain.vercel.app' // Will update with actual Vercel URL
   ],
   credentials: true
 }));
