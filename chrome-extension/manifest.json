@@ -10,7 +10,8 @@
   ],
   "host_permissions": [
     "http://localhost:5432/*",
-    "https://your-domain.com/*"
+    "https://your-backend-domain.onrender.com/*",
+    "https://your-frontend-domain.vercel.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
