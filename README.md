@@ -36,28 +36,40 @@ cp .env.example .env
 ### 3) Create database tables
 Use your PostgreSQL client to run:
 ```sql
+-- Enable RLS (for Supabase)
+ALTER TABLE IF EXISTS users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS jobs ENABLE ROW LEVEL SECURITY;
+
+-- Drop tables if they exist
+DROP TABLE IF EXISTS jobs;
+DROP TABLE IF EXISTS users;
+
+-- Create users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
 );
 
+-- Create jobs table
 CREATE TABLE jobs (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  title VARCHAR(255) NOT NULL,
-  company VARCHAR(255) NOT NULL,
+  title TEXT NOT NULL,
+  company TEXT NOT NULL,
   link TEXT,
-  status VARCHAR(50) DEFAULT 'applied',
+  status TEXT DEFAULT 'applied',
   date_applied DATE,
   notes TEXT,
-  tags TEXT[],
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  tags TEXT[]
 );
 
-CREATE INDEX idx_jobs_user_id ON jobs(user_id);
+-- Add RLS policies (for Supabase)
+CREATE POLICY "Allow all users access"
+ON users FOR ALL USING (true);
+
+CREATE POLICY "Allow all jobs access"
+ON jobs FOR ALL USING (true);
 ```
 
 ### 4) Run the app (dev)
