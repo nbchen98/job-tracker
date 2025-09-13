@@ -33,8 +33,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Handle preflight requests explicitly
-app.options('*', cors());
+// CORS middleware handles preflight requests automatically
 app.use(express.json());
 
 // Database connection is now handled in models/database.js
