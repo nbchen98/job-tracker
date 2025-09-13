@@ -26,7 +26,7 @@ app.use(cors({
     'http://localhost:5173', 
     'http://localhost:5432',
     'https://job-tracker-nghc.onrender.com', // Your Render backend URL
-    'https://your-frontend-domain.vercel.app' // Will update with actual Vercel URL
+    'https://job-tracker-nbchen98s-projects.vercel.app/' // Will update with actual Vercel URL
   ],
   credentials: true
 }));
