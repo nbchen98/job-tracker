@@ -1,5 +1,5 @@
 /**
- * Popup script for Job Tracker Chrome Extension
+ * Popup script for Applymate Chrome Extension
  * Handles form submission and communication with content script
  */
 

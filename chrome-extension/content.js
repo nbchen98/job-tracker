@@ -1,5 +1,5 @@
 /**
- * Content script for Job Tracker Chrome Extension
+ * Content script for Applymate Chrome Extension
  * Extracts job information from web pages and sends to popup
  */
 

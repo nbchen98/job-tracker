@@ -1,6 +1,6 @@
-# Job Tracker Chrome Extension
+# Applymate Chrome Extension
 
-A Chrome extension that allows you to quickly add job applications to your Job Tracker from any job posting page.
+A Chrome extension that allows you to quickly add job applications to your Applymate from any job posting page.
 
 ## Features
 
@@ -19,11 +19,11 @@ A Chrome extension that allows you to quickly add job applications to your Job T
 
 2. **Configure the Extension**:
    - Click the extension icon in your browser toolbar
-   - Set your Job Tracker API URL (default: `http://localhost:3000`)
+   - Set your Applymate API URL (default: `http://localhost:3000`)
    - Add your authentication token
 
 3. **Get Your Auth Token**:
-   - Go to your Job Tracker app
+   - Go to your Applymate app
    - Open browser developer tools (F12)
    - Go to Application/Storage tab → Local Storage
    - Copy the `token` value
@@ -34,7 +34,7 @@ A Chrome extension that allows you to quickly add job applications to your Job T
 2. **Click the extension icon** in your browser toolbar
 3. **Review the auto-filled information** (title, company, link, etc.)
 4. **Add any additional details** (notes, tags, status)
-5. **Click "Add Job"** to save to your Job Tracker
+5. **Click "Add Job"** to save to your Applymate
 
 ## Supported Job Sites
 
@@ -64,11 +64,11 @@ chrome-extension/
 - **Content Script**: Extracts job data from web pages
 - **Popup**: User interface for adding jobs
 - **Background**: Handles extension lifecycle and communication
-- **API Integration**: Communicates with your Job Tracker backend
+- **API Integration**: Communicates with your Applymate backend
 
 ## API Integration
 
-The extension communicates with your Job Tracker API using the following endpoint:
+The extension communicates with your Applymate API using the following endpoint:
 
 ```
 POST /api/jobs
@@ -96,7 +96,7 @@ Content-Type: application/json
 ### API connection issues?
 - Verify your API URL is correct
 - Check that your authentication token is valid
-- Ensure your Job Tracker backend is running
+- Ensure your Applymate backend is running
 - Check browser console for error messages
 
 ### Auto-fill not working?

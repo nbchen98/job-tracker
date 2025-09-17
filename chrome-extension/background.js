@@ -1,5 +1,5 @@
 /**
- * Background service worker for Job Tracker Chrome Extension
+ * Background service worker for Applymate Chrome Extension
  * Handles extension lifecycle and communication
  */
 
@@ -8,12 +8,12 @@ chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     // Set default configuration
     chrome.storage.sync.set({
-      apiUrl: 'https://job-tracker-nghc.onrender.com',
+      apiUrl: 'https://applymate-nghc.onrender.com',
       authToken: ''
     });
     
     // Open options page or show welcome message
-    console.log('Job Tracker Extension installed!');
+    console.log('Applymate Extension installed!');
   }
 });
 

@@ -39,7 +39,7 @@ app.use(cors({
     'http://localhost:5173', 
     'http://localhost:5432',
     'https://job-tracker-nghc.onrender.com', // Your Render backend URL
-    'https://job-tracker-henna.vercel.app' // Your actual Vercel frontend URL
+    'https://applymate-henna.vercel.app' // Your actual Vercel frontend URL
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

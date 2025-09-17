@@ -89,7 +89,7 @@ const DashboardPage = () => {
         <div className="bg-white shadow rounded-lg p-6">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              Welcome to your Job Tracker!
+              Welcome to your Applymate!
             </h1>
           </div>
           

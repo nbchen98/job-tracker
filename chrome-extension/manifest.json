@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Job Tracker Extension",
+  "name": "Applymate Extension",
   "version": "1.0",
-  "description": "Quickly add job applications to your Job Tracker from any job posting page",
+  "description": "Quickly add job applications to your Applymate from any job posting page",
   "permissions": [
     "activeTab",
     "storage",
@@ -10,12 +10,12 @@
   ],
   "host_permissions": [
     "http://localhost:5432/*",
-    "https://job-tracker-nghc.onrender.com/*",
-    "https://job-tracker-henna.vercel.app/*"
+    "https://applymate-nghc.onrender.com/*",
+    "https://applymate-henna.vercel.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Add to Job Tracker"
+    "default_title": "Add to Applymate"
   },
   "content_scripts": [
     {
