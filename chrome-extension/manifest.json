@@ -10,7 +10,7 @@
   ],
   "host_permissions": [
     "http://localhost:5432/*",
-    "https://applymate-nghc.onrender.com/*",
+    "https://job-tracker-nghc.onrender.com/*",
     "https://applymate-henna.vercel.app/*"
   ],
   "action": {

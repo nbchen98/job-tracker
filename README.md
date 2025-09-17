@@ -5,7 +5,7 @@ A full-stack job application tracker with a React frontend, Node.js/Express back
 ## 🚀 Live Demo
 
 - **Frontend**: [https://applymate-henna.vercel.app](https://applymate-henna.vercel.app)
-- **Backend API**: [https://applymate-nghc.onrender.com](https://applymate-nghc.onrender.com)
+- **Backend API**: [https://job-tracker-nghc.onrender.com](https://job-tracker-nghc.onrender.com)
 - **Chrome Extension**: Available in the `chrome-extension/` folder
 
 ## Features

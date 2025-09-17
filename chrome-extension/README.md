@@ -19,7 +19,7 @@ A Chrome extension that allows you to quickly add job applications to your Apply
 
 2. **Configure the Extension**:
    - Click the extension icon in your browser toolbar
-   - Set your Applymate API URL (default: `http://localhost:3000`)
+   - Set your Applymate API URL (default: `https://job-tracker-nghc.onrender.com`)
    - Add your authentication token
 
 3. **Get Your Auth Token**:
