@@ -12,6 +12,13 @@ console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'SET (length: ' + proces
 console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'SET (length: ' + process.env.JWT_SECRET.length + ')' : 'NOT SET');
 console.log('NODE_ENV:', process.env.NODE_ENV || 'NOT SET');
 
+// Debug: Log connection string format (without password)
+if (process.env.DATABASE_URL) {
+  const url = process.env.DATABASE_URL;
+  const maskedUrl = url.replace(/:\/\/[^:]+:[^@]+@/, '://***:***@');
+  console.log('🔍 Connection string format:', maskedUrl);
+}
+
 if (missingVars.length > 0) {
   console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`);
   console.error('Please create a .env file with the required variables. See .env.example for reference.');
