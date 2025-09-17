@@ -6,6 +6,12 @@ require('dotenv').config();
 const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
+// Debug: Log environment variables (without sensitive data)
+console.log('🔍 Environment check:');
+console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'SET (length: ' + process.env.DATABASE_URL.length + ')' : 'NOT SET');
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'SET (length: ' + process.env.JWT_SECRET.length + ')' : 'NOT SET');
+console.log('NODE_ENV:', process.env.NODE_ENV || 'NOT SET');
+
 if (missingVars.length > 0) {
   console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`);
   console.error('Please create a .env file with the required variables. See .env.example for reference.');
