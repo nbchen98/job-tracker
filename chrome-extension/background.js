@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     // Set default configuration
     chrome.storage.sync.set({
-      apiUrl: 'http://localhost:5432',
+      apiUrl: 'https://job-tracker-nghc.onrender.com',
       authToken: ''
     });
     

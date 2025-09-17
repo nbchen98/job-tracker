@@ -10,8 +10,8 @@
   ],
   "host_permissions": [
     "http://localhost:5432/*",
-    "https://your-backend-domain.onrender.com/*",
-    "https://your-frontend-domain.vercel.app/*"
+    "https://job-tracker-nghc.onrender.com/*",
+    "https://job-tracker-henna.vercel.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
