@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/yourusername/job-tracker/issues"
   },
-  "homepage": "https://github.com/yourusername/job-tracker#readme",
+  "homepage": "https://job-tracker-henna.vercel.app",
   "devDependencies": {
     "concurrently": "^8.2.2"
   }

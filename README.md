@@ -2,6 +2,12 @@
 
 A full-stack job application tracker with a React frontend, Node.js/Express backend, and a Chrome extension.
 
+## 🚀 Live Demo
+
+- **Frontend**: [https://job-tracker-henna.vercel.app](https://job-tracker-henna.vercel.app)
+- **Backend API**: [https://job-tracker-nghc.onrender.com](https://job-tracker-nghc.onrender.com)
+- **Chrome Extension**: Available in the `chrome-extension/` folder
+
 ## Features
 - Secure authentication (JWT)
 - Create, read, update, delete job entries
