@@ -49,7 +49,7 @@ chrome-extension/
 ├── popup.html            # Extension popup UI
 ├── popup.js              # Popup logic
 ├── content.js            # Content script for job extraction
-├── authSync.js           # Content script that copies the session from the Applymate site
+├── authSync.js           # Content script that sends the session from the Applymate site
 ├── background.js         # Background service worker
 └── README.md            # This file
 ```
@@ -59,7 +59,7 @@ chrome-extension/
 - **Content Script**: Extracts job data from web pages
 - **Auth Sync**: Runs only on the Applymate site and keeps the extension signed in
 - **Popup**: User interface for adding jobs, with a sign-in prompt when there's no session
-- **Background**: Handles extension lifecycle and communication
+- **Background**: Handles extension lifecycle and communication, and stores the session in storage that content scripts can't read
 - **API Integration**: Communicates with your Applymate backend
 
 ## API Integration

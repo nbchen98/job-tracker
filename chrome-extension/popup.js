@@ -19,7 +19,7 @@ const openAppBtn = document.getElementById('open-app');
 
 const APP_URL = 'https://applymate-henna.vercel.app/login';
 
-// Show the sign-in prompt if there's no session (authSync.js provides it)
+// Show the sign-in prompt if there's no session (background.js stores it)
 async function checkSession() {
   const { apiUrl, authToken } = await chrome.storage.local.get(['apiUrl', 'authToken']);
   signedOutDiv.style.display = apiUrl && authToken ? 'none' : 'block';

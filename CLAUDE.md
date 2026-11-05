@@ -57,9 +57,10 @@ To load the extension, use `chrome://extensions` > Developer mode > Load unpacke
 ### Chrome extension
 
 - `content.js` runs on all URLs, scrapes job data from the page, and writes it to `chrome.storage.local`. `popup.js` reads that, lets the user edit it, and POSTs to `{apiUrl}/api/jobs`.
-- It has no login of its own. `authSync.js`, a content script limited to the web app's origins, copies the JWT from `localStorage` into `chrome.storage.local` along with the matching `apiUrl`. It re-reads on page load, on `storage` events, and on the `applymate:auth-changed` event that `AuthContext` fires on login and logout. On a 401 the popup clears the token and prompts the user to sign in on the site.
+- It has no login of its own. `authSync.js`, a content script limited to the web app's origins, sends the JWT from `localStorage` to `background.js`, which checks `sender.origin` and saves it to `chrome.storage.local` with the matching `apiUrl`. It re-sends on page load, on `storage` events, and on the `applymate:auth-changed` event fired when the web app's token changes. On a 401 the popup clears the token and prompts the user to sign in on the site.
+- `chrome.storage.local` is restricted to `TRUSTED_CONTEXTS`, so content scripts can't use it. Only the popup and service worker can read or write it; content scripts must message the service worker instead.
 
 ### Cross-cutting
 
-- **Adding or changing an API host or frontend origin** means updating the hardcoded lists in several places: the CORS `origin` array in `backend/index.js`, `host_permissions` and the `authSync.js` `matches` in `chrome-extension/manifest.json`, the origin-to-API map in `chrome-extension/authSync.js`, and `APP_URL` in `chrome-extension/popup.js`. The production frontend reads `VITE_API_URL` at build time.
+- **Adding or changing an API host or frontend origin** means updating the hardcoded lists in several places: the CORS `origin` array in `backend/index.js`, `host_permissions` and the `authSync.js` `matches` in `chrome-extension/manifest.json`, the origin-to-API map in `chrome-extension/background.js`, and `APP_URL` in `chrome-extension/popup.js`. The production frontend reads `VITE_API_URL` at build time.
 - **`date_applied` is a date-only string.** `models/database.js` overrides the `pg` parser so `DATE` columns reach the API as `YYYY-MM-DD`. In the frontend, use the helpers in `src/utils/dateUtils.js` rather than `new Date(value)`, which reads that format as UTC and shows the previous day in timezones behind UTC.
