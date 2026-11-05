@@ -13,26 +13,20 @@ const cancelBtn = document.getElementById('cancelBtn');
 const submitBtn = document.getElementById('submitBtn');
 const addManuallyBtn = document.getElementById('add-manually');
 
-// Configuration elements
-const apiUrlInput = document.getElementById('apiUrl');
-const authTokenInput = document.getElementById('authToken');
-const saveConfigBtn = document.getElementById('saveConfig');
+// Sign-in elements
+const signedOutDiv = document.getElementById('signed-out');
+const openAppBtn = document.getElementById('open-app');
 
-// Load configuration
-async function loadConfig() {
-  const config = await chrome.storage.sync.get(['apiUrl', 'authToken']);
-  if (config.apiUrl) apiUrlInput.value = config.apiUrl;
-  if (config.authToken) authTokenInput.value = config.authToken;
+const APP_URL = 'https://applymate-henna.vercel.app/login';
+
+// Show the sign-in prompt if there's no session (authSync.js provides it)
+async function checkSession() {
+  const { apiUrl, authToken } = await chrome.storage.local.get(['apiUrl', 'authToken']);
+  signedOutDiv.style.display = apiUrl && authToken ? 'none' : 'block';
 }
 
-// Save configuration
-async function saveConfig() {
-  const config = {
-    apiUrl: apiUrlInput.value,
-    authToken: authTokenInput.value
-  };
-  await chrome.storage.sync.set(config);
-  showStatus('Configuration saved!', 'success');
+function openApp() {
+  chrome.tabs.create({ url: APP_URL });
 }
 
 // Show status message
@@ -51,40 +45,19 @@ async function loadJobData() {
     
     const response = await chrome.tabs.sendMessage(tab.id, { action: 'extractJobData' });
     
-    if (response && response.success) {
-      const { data, isJobPosting } = response;
-      
-      if (isJobPosting) {
-        // Pre-fill form with extracted data
-        document.getElementById('title').value = data.title || '';
-        document.getElementById('company').value = data.company || '';
-        document.getElementById('link').value = data.link || '';
-        document.getElementById('date_applied').value = data.date_applied || '';
-        document.getElementById('notes').value = data.notes || '';
-        
-        showJobForm();
-      } else {
-        showNotJobPage();
-      }
+    if (response && response.success && response.isJobPosting) {
+      const { data } = response;
+
+      // Pre-fill form with extracted data
+      document.getElementById('title').value = data.title || '';
+      document.getElementById('company').value = data.company || '';
+      document.getElementById('link').value = data.link || '';
+      document.getElementById('date_applied').value = data.date_applied || '';
+      document.getElementById('notes').value = data.notes || '';
+
+      showJobForm();
     } else {
-      // Fallback: try to get data from storage
-      const storedData = await chrome.storage.local.get(['extractedJobData', 'isJobPosting']);
-      if (storedData.extractedJobData) {
-        const data = storedData.extractedJobData;
-        document.getElementById('title').value = data.title || '';
-        document.getElementById('company').value = data.company || '';
-        document.getElementById('link').value = data.link || '';
-        document.getElementById('date_applied').value = data.date_applied || '';
-        document.getElementById('notes').value = data.notes || '';
-        
-        if (storedData.isJobPosting) {
-          showJobForm();
-        } else {
-          showNotJobPage();
-        }
-      } else {
-        showNotJobPage();
-      }
+      showNotJobPage();
     }
   } catch (error) {
     console.error('Error loading job data:', error);
@@ -113,19 +86,19 @@ function addJobManually() {
 
 // Submit job to API
 async function submitJob(formData) {
-  const config = await chrome.storage.sync.get(['apiUrl', 'authToken']);
-  
-  if (!config.apiUrl) {
-    showStatus('Please configure API URL in settings', 'error');
+  const { apiUrl, authToken } = await chrome.storage.local.get(['apiUrl', 'authToken']);
+
+  if (!apiUrl || !authToken) {
+    signedOutDiv.style.display = 'block';
     return false;
   }
 
   try {
-    const response = await fetch(`${config.apiUrl}/api/jobs`, {
+    const response = await fetch(`${apiUrl}/api/jobs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${config.authToken}`
+        'Authorization': `Bearer ${authToken}`
       },
       body: JSON.stringify(formData)
     });
@@ -133,6 +106,11 @@ async function submitJob(formData) {
     if (response.ok) {
       showStatus('Job added successfully!', 'success');
       return true;
+    } else if (response.status === 401) {
+      // The session expired, so the user needs to sign in on the site again
+      await chrome.storage.local.remove('authToken');
+      signedOutDiv.style.display = 'block';
+      return false;
     } else {
       const error = await response.text();
       showStatus(`Error: ${error}`, 'error');
@@ -188,11 +166,11 @@ function handleCancel() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadConfig();
+  await checkSession();
   await loadJobData();
 });
 
 addJobForm.addEventListener('submit', handleFormSubmit);
 cancelBtn.addEventListener('click', handleCancel);
 addManuallyBtn.addEventListener('click', addJobManually);
-saveConfigBtn.addEventListener('click', saveConfig);
+openAppBtn.addEventListener('click', openApp);

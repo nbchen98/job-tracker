@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { jobsAPI } from '../api/jobs.js';
 import AddJobModal from '../components/AddJobModal.jsx';
+import { formatDateForDisplay, getJobSortDate } from '../utils/dateUtils.js';
 
 const DashboardPage = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -41,8 +41,8 @@ const DashboardPage = () => {
   }, {});
 
   // Get recent applications (last 5)
-  const recentJobs = jobs
-    .sort((a, b) => new Date(b.date_applied || b.created_at) - new Date(a.date_applied || a.created_at))
+  const recentJobs = [...jobs]
+    .sort((a, b) => getJobSortDate(b) - getJobSortDate(a))
     .slice(0, 5);
 
   // Handle job added from modal
@@ -194,7 +194,7 @@ const DashboardPage = () => {
                       <p className="text-sm text-gray-600">{job.company}</p>
                       {job.date_applied && (
                         <p className="text-xs text-gray-500">
-                          Applied: {new Date(job.date_applied).toLocaleDateString()}
+                          Applied: {formatDateForDisplay(job.date_applied)}
                         </p>
                       )}
                     </div>

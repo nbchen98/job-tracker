@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { jobsAPI } from '../api/jobs.js';
+import { formatDateForInput } from '../utils/dateUtils.js';
 
 const AddJobModal = ({ isOpen, onClose, onJobAdded, editingJob = null }) => {
   const { logout } = useAuth();
@@ -26,7 +27,7 @@ const AddJobModal = ({ isOpen, onClose, onJobAdded, editingJob = null }) => {
         company: editingJob.company || '',
         link: editingJob.link || '',
         status: editingJob.status || 'applied',
-        date_applied: editingJob.date_applied ? editingJob.date_applied.split('T')[0] : '',
+        date_applied: formatDateForInput(editingJob.date_applied),
         notes: editingJob.notes || '',
         tags: editingJob.tags ? editingJob.tags.join(', ') : ''
       });

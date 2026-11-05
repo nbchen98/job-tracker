@@ -40,25 +40,17 @@ cp .env.example .env
 ```
 
 ### 3) Create database tables
-Use your PostgreSQL client to run:
+Use your PostgreSQL client to run the script below. It is safe to re-run and does not touch existing data.
 ```sql
--- Enable RLS (for Supabase)
-ALTER TABLE IF EXISTS users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE IF EXISTS jobs ENABLE ROW LEVEL SECURITY;
-
--- Drop tables if they exist
-DROP TABLE IF EXISTS jobs;
-DROP TABLE IF EXISTS users;
-
 -- Create users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
 
 -- Create jobs table
-CREATE TABLE jobs (
+CREATE TABLE IF NOT EXISTS jobs (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
@@ -70,12 +62,13 @@ CREATE TABLE jobs (
   tags TEXT[]
 );
 
--- Add RLS policies (for Supabase)
-CREATE POLICY "Allow all users access"
-ON users FOR ALL USING (true);
-
-CREATE POLICY "Allow all jobs access"
-ON jobs FOR ALL USING (true);
+-- Enable RLS with no policies (for Supabase): this blocks Supabase's public
+-- API, while the backend still has access if it connects as the table owner.
+-- The DROP lines remove the allow-all policies older versions of this script added.
+DROP POLICY IF EXISTS "Allow all users access" ON users;
+DROP POLICY IF EXISTS "Allow all jobs access" ON jobs;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
 ```
 
 ### 4) Run the app (dev)
@@ -83,7 +76,7 @@ ON jobs FOR ALL USING (true);
 # From project root
 npm run dev
 # Frontend: http://localhost:5173
-# Backend:  http://localhost:5000 (or env PORT)
+# Backend:  http://localhost:5001 (or env PORT)
 ```
 
 ## API (brief)

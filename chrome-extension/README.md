@@ -7,7 +7,7 @@ A Chrome extension that allows you to quickly add job applications to your Apply
 - 🎯 **Smart Job Detection**: Automatically detects job posting pages
 - 📝 **Auto-fill Forms**: Extracts job title, company, and description from popular job sites
 - ⚡ **Quick Add**: Add jobs with one click from any job posting
-- 🔧 **Configurable**: Set your own API endpoint and authentication
+- 🔐 **Automatic Sign-in**: Uses your Applymate session, with no tokens to copy
 - 🌐 **Universal**: Works on LinkedIn, Indeed, Glassdoor, and other job sites
 
 ## Installation
@@ -17,16 +17,10 @@ A Chrome extension that allows you to quickly add job applications to your Apply
    - Enable "Developer mode" in the top right
    - Click "Load unpacked" and select the `chrome-extension` folder
 
-2. **Configure the Extension**:
-   - Click the extension icon in your browser toolbar
-   - Set your Applymate API URL (default: `https://job-tracker-nghc.onrender.com`)
-   - Add your authentication token
-
-3. **Get Your Auth Token**:
-   - Go to your Applymate app
-   - Open browser developer tools (F12)
-   - Go to Application/Storage tab → Local Storage
-   - Copy the `token` value
+2. **Sign in to Applymate**:
+   - Log in to the [Applymate web app](https://applymate-henna.vercel.app) in the same Chrome profile. The extension picks up your session automatically.
+   - If Applymate was already open when you installed the extension, refresh the tab.
+   - Sessions last 24 hours. When yours expires, the extension asks you to sign in again.
 
 ## Usage
 
@@ -55,6 +49,7 @@ chrome-extension/
 ├── popup.html            # Extension popup UI
 ├── popup.js              # Popup logic
 ├── content.js            # Content script for job extraction
+├── authSync.js           # Content script that copies the session from the Applymate site
 ├── background.js         # Background service worker
 └── README.md            # This file
 ```
@@ -62,7 +57,8 @@ chrome-extension/
 ### Key Components
 
 - **Content Script**: Extracts job data from web pages
-- **Popup**: User interface for adding jobs
+- **Auth Sync**: Runs only on the Applymate site and keeps the extension signed in
+- **Popup**: User interface for adding jobs, with a sign-in prompt when there's no session
 - **Background**: Handles extension lifecycle and communication
 - **API Integration**: Communicates with your Applymate backend
 
@@ -94,8 +90,7 @@ Content-Type: application/json
 - Try refreshing the page and clicking the extension icon again
 
 ### API connection issues?
-- Verify your API URL is correct
-- Check that your authentication token is valid
+- Log in to Applymate again, or refresh its tab if you're already logged in
 - Ensure your Applymate backend is running
 - Check browser console for error messages
 

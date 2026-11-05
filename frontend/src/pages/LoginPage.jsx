@@ -46,7 +46,7 @@ const LoginPage = () => {
       } else {
         setError(result.message);
       }
-    } catch (error) {
+    } catch {
       setError('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);

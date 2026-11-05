@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../api/auth.js';
+import { notifyAuthChanged } from '../utils/authEvents.js';
 
 // Create the Auth Context
 const AuthContext = createContext();
 
 // Custom hook to use the auth context
+// eslint-disable-next-line react-refresh/only-export-components -- only affects hot reload in dev
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -48,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setLoading(true);
-      const response = await authAPI.register(userData);
+      await authAPI.register(userData);
       return { success: true, message: 'Registration successful! Please log in.' };
     } catch (error) {
       const message = error.response?.data?.error || 'Registration failed';
@@ -62,29 +64,24 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setLoading(true);
-      console.log('🔐 Login attempt with:', credentials.email);
-      
+
       const response = await authAPI.login(credentials);
-      console.log('✅ Login response:', response);
-      
+
       // Backend returns { token }, we need to create user object
       const { token: newToken } = response;
       const userData = { email: credentials.email }; // Create user object from credentials
-      
-      console.log('💾 Storing token:', newToken);
-      console.log('💾 Storing user:', userData);
-      
+
       localStorage.setItem('token', newToken);
       localStorage.setItem('user', JSON.stringify(userData));
-      
+      notifyAuthChanged();
+
       setToken(newToken);
       setUser(userData);
-      
-      console.log('✅ Login successful, token and user set');
-      
+
       return { success: true, user: userData };
     } catch (error) {
-      console.error('❌ Login error:', error);
+      // Log only the message: the axios error's config contains the password
+      console.error('❌ Login error:', error.message);
       const message = error.response?.data?.error || 'Login failed';
       return { success: false, message };
     } finally {
@@ -96,16 +93,13 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    notifyAuthChanged();
     setToken(null);
     setUser(null);
   };
 
   // Check if user is authenticated
   const isAuthenticated = () => {
-    console.log('🔍 Checking authentication:');
-    console.log('  - token:', token);
-    console.log('  - user:', user);
-    console.log('  - result:', !!token && !!user);
     return !!token && !!user;
   };
 

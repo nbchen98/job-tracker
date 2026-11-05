@@ -5,14 +5,13 @@
 
 // Extension installation
 chrome.runtime.onInstalled.addListener((details) => {
+  // Older versions kept these in sync storage, which copies them to every
+  // browser on the Chrome profile. authSync.js now manages them in local storage.
+  chrome.storage.sync.remove(['apiUrl', 'authToken']);
+  // Older versions also saved data from every visited page here
+  chrome.storage.local.remove(['extractedJobData', 'isJobPosting', 'pageUrl']);
+
   if (details.reason === 'install') {
-    // Set default configuration
-    chrome.storage.sync.set({
-      apiUrl: 'https://job-tracker-nghc.onrender.com',
-      authToken: ''
-    });
-    
-    // Open options page or show welcome message
     console.log('Applymate Extension installed!');
   }
 });

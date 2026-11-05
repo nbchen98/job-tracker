@@ -9,7 +9,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "http://localhost:5432/*",
+    "http://localhost:5001/*",
     "https://job-tracker-nghc.onrender.com/*",
     "https://applymate-henna.vercel.app/*"
   ],
@@ -21,6 +21,14 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://applymate-henna.vercel.app/*",
+        "http://localhost:5173/*"
+      ],
+      "js": ["authSync.js"],
       "run_at": "document_end"
     }
   ],

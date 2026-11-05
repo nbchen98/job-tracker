@@ -3,13 +3,22 @@
  * Extracts job information from web pages and sends to popup
  */
 
+// Today's date as YYYY-MM-DD in the user's timezone. toISOString() would use
+// UTC, which gives tomorrow's date during the evening in the US.
+function getLocalDateString() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
 // Function to extract job data from common job posting sites
 function extractJobData() {
   const data = {
     title: '',
     company: '',
     link: window.location.href,
-    date_applied: new Date().toISOString().split('T')[0]
+    date_applied: getLocalDateString()
   };
 
   // Try to extract job title
@@ -135,17 +144,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       isJobPosting: isJob
     });
   }
-});
-
-// Send initial data when page loads
-window.addEventListener('load', () => {
-  const jobData = extractJobData();
-  const isJob = isJobPosting();
-  
-  // Store data in chrome storage for popup to access
-  chrome.storage.local.set({
-    extractedJobData: jobData,
-    isJobPosting: isJob,
-    pageUrl: window.location.href
-  });
 });

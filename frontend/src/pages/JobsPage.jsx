@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { jobsAPI } from '../api/jobs.js';
 import AddJobModal from '../components/AddJobModal.jsx';
+import { parseDateString, formatDateForDisplay, getDateFilterCutoff, getJobSortDate } from '../utils/dateUtils.js';
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -91,42 +92,9 @@ const JobsPage = () => {
     }
 
     // Date filter
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      const filterDate = new Date();
-      
-      switch (dateFilter) {
-        case 'today':
-          filterDate.setHours(0, 0, 0, 0);
-          filteredJobs = filteredJobs.filter(job => {
-            const jobDate = new Date(job.date_applied);
-            return jobDate >= filterDate;
-          });
-          break;
-        case 'week':
-          filterDate.setDate(now.getDate() - 7);
-          filteredJobs = filteredJobs.filter(job => {
-            const jobDate = new Date(job.date_applied);
-            return jobDate >= filterDate;
-          });
-          break;
-        case 'month':
-          filterDate.setMonth(now.getMonth() - 1);
-          filteredJobs = filteredJobs.filter(job => {
-            const jobDate = new Date(job.date_applied);
-            return jobDate >= filterDate;
-          });
-          break;
-        case '3months':
-          filterDate.setMonth(now.getMonth() - 3);
-          filteredJobs = filteredJobs.filter(job => {
-            const jobDate = new Date(job.date_applied);
-            return jobDate >= filterDate;
-          });
-          break;
-        default:
-          break;
-      }
+    const dateCutoff = getDateFilterCutoff(dateFilter);
+    if (dateCutoff) {
+      filteredJobs = filteredJobs.filter(job => parseDateString(job.date_applied) >= dateCutoff);
     }
 
     // Sort jobs
@@ -135,8 +103,8 @@ const JobsPage = () => {
       
       switch (sortBy) {
         case 'date_applied':
-          aValue = new Date(a.date_applied || a.created_at || 0);
-          bValue = new Date(b.date_applied || b.created_at || 0);
+          aValue = getJobSortDate(a);
+          bValue = getJobSortDate(b);
           break;
         case 'company':
           aValue = a.company.toLowerCase();
@@ -359,7 +327,7 @@ const JobsPage = () => {
                             <p className="text-sm text-gray-600">{job.company}</p>
                             {job.date_applied && (
                               <p className="text-sm text-gray-500">
-                                Applied: {new Date(job.date_applied).toLocaleDateString()}
+                                Applied: {formatDateForDisplay(job.date_applied)}
                               </p>
                             )}
                             <div className="mt-1">
